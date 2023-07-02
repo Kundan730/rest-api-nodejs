@@ -31,8 +31,7 @@ const port = 8080;
 const server = http.createServer(app);
 
 server.listen(port, () => {
-  console.log(`Server 
-  is running on http://localhost:${port}`);
+  console.log(`Server is running on http://localhost:${port}`);
 });
 
 const MONGO_URL = process.env.DATABASE_URL;
