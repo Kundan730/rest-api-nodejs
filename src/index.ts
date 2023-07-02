@@ -9,6 +9,9 @@ import mongoose from 'mongoose';
 require('dotenv').config();
 import router from './router';
 
+
+
+
 const app = express();
 
 app.use(cors({
@@ -23,24 +26,37 @@ app.get('/', (req, res) => {
   res.send('Hello World');
 });
 
+
+
 const port = 8080;
 
 const server = http.createServer(app);
 
 server.listen(port, () => {
-  console.log(`Server is running on http://localhost:${port}`);
+  console.log(`Server 
+  is running on http://localhost:${port}`)
+  ;
 });
 
 const MONGO_URL = process.env.DATABASE_URL
 
 mongoose.Promise = Promise;
 mongoose.connect(MONGO_URL)
+
+
 .then(() => {
   console.log('Connected to MongoDB');
+
 })
+
 .catch((error) => {
-  console.error('Error connecting to MongoDB:', error);
+
+  console.error('Error connecting to MongoDB:',
+   error);
 });
 
-mongoose.connection.on('error', (error: Error) => console.log(error));
+mongoose.connection.on('error',
+ (error:
+   Error) => 
+   console.log(error));
 app.use('/', router());
