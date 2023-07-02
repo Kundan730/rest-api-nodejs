@@ -5,15 +5,15 @@ import cookieParser from 'cookie-parser';
 import compression from 'compression';
 import cors from 'cors';
 import mongoose from 'mongoose';
+
 require('dotenv').config();
+import router from './router';
 
 const app = express();
 
-app.use(
-  cors({
-    credentials: true,
-  })
-);
+app.use(cors({
+  credentials: true,
+}));
 
 app.use(compression());
 app.use(cookieParser());
@@ -37,10 +37,10 @@ mongoose.Promise = Promise;
 mongoose.connect(MONGO_URL)
 .then(() => {
   console.log('Connected to MongoDB');
-  // Start your application logic here
 })
 .catch((error) => {
   console.error('Error connecting to MongoDB:', error);
 });
 
 mongoose.connection.on('error', (error: Error) => console.log(error));
+app.use('/', router());
