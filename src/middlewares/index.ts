@@ -1,51 +1,57 @@
-import express from 'express';
+import express from "express";
 
-import { get, merge } from 'lodash';
+import { get, merge } from "lodash";
 
-import { getUserBySessionToken } from '../db/users';
+import { getUserBySessionToken } from "../db/users";
 
-export const isOwner = async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+export const isOwner = async (
+  req: express.Request,
+  res: express.Response,
+  next: express.NextFunction
+) => {
   try {
-    const {id} = req.params;
+    const { id } = req.params;
 
-    const currentUserId = get(req, 'identity._id') as string;
+    const currentUserId = get(req, "identity._id") as string;
 
     // TODO check ownership of the resource with id and currentUserId
 
-    if(!currentUserId) {
+    if (!currentUserId) {
       return res.sendStatus(403);
     }
 
-    if(currentUserId.toString() !== id) {
+    if (currentUserId.toString() !== id) {
       return res.sendStatus(403);
     }
 
     next();
-
   } catch (error) {
-    console.log(error)
+    console.log(error);
   }
-}
+};
 
-export const isAuthenticated = async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+export const isAuthenticated = async (
+  req: express.Request,
+  res: express.Response,
+  next: express.NextFunction
+) => {
   try {
-    const sessionToken = req.cookies['NODEJS_AUTH'];
+    const sessionToken = req.cookies["NODEJS_AUTH"];
 
-    if(!sessionToken) {
+    if (!sessionToken) {
       return res.sendStatus(403);
     }
 
     const existingUser = await getUserBySessionToken(sessionToken);
 
-    if(!existingUser) {
+    if (!existingUser) {
       return res.sendStatus(403);
     }
 
-    merge(req, {identity: existingUser});
+    merge(req, { identity: existingUser });
 
     return next();
-
   } catch (error) {
-    console.log(error)
+    console.log(error);
   }
-}
+};
